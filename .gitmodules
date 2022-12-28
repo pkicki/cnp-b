@@ -1,0 +1,3 @@
+[submodule "utils/hitting_point_optimization"]
+	path = utils/hitting_point_optimization
+	url = https://github.com/pkicki/hitting_point_optimization.git
