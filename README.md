@@ -19,7 +19,7 @@ Download pre-trained models
 ```
 bash download_models.sh
 ```
-Test the model on a sample problem
+Make an inference of the model on a sample problem
 ```
 python demo.py
 ```
@@ -27,11 +27,11 @@ python demo.py
 ## Use for motion planning in ROS
 Run docker container
 ```
-<run docker container> 
+bash docker/run.sh
 ```
 Run demo
 ```
-<run demo in a container> 
+bash demo/demo.sh
 ```
 
 
