@@ -4,14 +4,15 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 SCRIPT_DIR = os.path.dirname(__file__)
-sys.path.append(SCRIPT_DIR)
+PACKAGE_DIR = os.path.dirname(SCRIPT_DIR)
+sys.path.append(PACKAGE_DIR)
 
 from utils.bspline import BSpline
 from utils.constants import Base
 from utils.hpo_interface import get_hitting_configuration_opt
 from utils.model import load_model_hitting, model_inference
 
-planner_path = os.path.join(SCRIPT_DIR, "..", "trained_models/hitting/best-149")
+planner_path = os.path.join(PACKAGE_DIR, "trained_models/hitting/best-149")
 dim_q_control_points = 6
 num_q_control_points = 15
 num_t_control_points = 20
