@@ -23,7 +23,7 @@ For Air-Hockey hitting
 * Coin-or-CLP `sudo apt install coinor-libclp-dev`
 
 For demonstration of motion planning in ROS
-* [nvidia-docker](https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/install-guide.html)
+* [docker](https://docs.docker.com/engine/install/ubuntu/)
 
 ## Usage
 Download data
