@@ -4,32 +4,12 @@ import tensorflow as tf
 from scipy.interpolate import BSpline as BSp
 from scipy.interpolate import interp1d
 
-from manifold_planning.models.iiwa_planner import IiwaPlanner
-from manifold_planning.models.iiwa_planner_boundaries import IiwaPlannerBoundaries
-from manifold_planning.models.iiwa_ik_hitting import IiwaIKHitting
-
-from models.iiwa_planner_boundaries import IiwaPlannerBoundariesKinodynamic
+from models.iiwa_planner_boundaries import IiwaPlannerBoundariesKinodynamic, IiwaPlannerBoundariesHitting
 
 
-def load_model(path, N, n_pts_fixed_begin, bsp, bsp_t):
-    model = IiwaPlanner(N, n_pts_fixed_begin, bsp, bsp_t)
-    model(np.zeros([1, 30], dtype=np.float32))
-    checkpoint = tf.train.Checkpoint(model=model)
-    checkpoint.restore(path).expect_partial()
-    return model
-
-
-def load_model_boundaries(path, N, n_pts_fixed_begin, n_pts_fixed_end, bsp, bsp_t):
-    model = IiwaPlannerBoundaries(N, n_pts_fixed_begin, n_pts_fixed_end, bsp, bsp_t)
+def load_model_hitting(path, N, bsp, bsp_t):
+    model = IiwaPlannerBoundariesHitting(N, 3, 2, bsp, bsp_t)
     model(np.zeros([1, 38], dtype=np.float32))
-    checkpoint = tf.train.Checkpoint(model=model)
-    checkpoint.restore(path).expect_partial()
-    return model
-
-
-def load_model_hpo(path):
-    model = IiwaIKHitting()
-    model(np.zeros([1, 17], dtype=np.float32))
     checkpoint = tf.train.Checkpoint(model=model)
     checkpoint.restore(path).expect_partial()
     return model
