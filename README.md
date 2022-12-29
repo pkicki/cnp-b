@@ -11,10 +11,17 @@ See also:\
 [paper](link_to_arxiv)
 
 ## Dependencies
+General
+* Tensorflow `pip install tensorflow`
+* Tensorflow-graphics `pip install tensorflow-graphics`
+* Pinocchio `sudo apt install ros-noetic-pinocchio`
+
+For Air-Hockey hitting
 * Nlopt `sudo apt install libnlopt-dev`
 * Coin-or-CLP `sudo apt install coinor-libclp-dev`
-* Pinocchio `sudo apt install ros-noetic-pinocchio`
-* nvidia-docker (for demonstration of motion planning in ROS)
+
+For demonstration of motion planning in ROS
+* nvidia-docker
 
 ## Usage
 Download data
@@ -25,13 +32,17 @@ Download pre-trained models
 ```
 bash download_models.sh
 ```
-Build python bindings
+Build python bindings (for Air Hockey hitting only)
 ```
-    bash build.sh
+bash build.sh
 ```
-Make an inference of the model on a sample problem
+Make an inference of the model on a sample Air Hockey hitting problem
 ```
-python demo.py
+python exmaples/air_hockey_hitting.py
+```
+or moving a vertically oriented heavy object
+```
+python exmaples/heavy_object.py
 ```
 
 ## Use for motion planning in ROS
