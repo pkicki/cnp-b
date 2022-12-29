@@ -4,12 +4,13 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 SCRIPT_DIR = os.path.dirname(__file__)
-sys.path.append(SCRIPT_DIR)
+PACKAGE_PATH = os.path.dirname(SCRIPT_DIR)
+sys.path.append(PACKAGE_PATH)
 
 from utils.bspline import BSpline
 from utils.model import model_inference, load_model_kino
 
-planner_path = os.path.join(SCRIPT_DIR, "..", "trained_models/kino/last_n-150")
+planner_path = os.path.join(PACKAGE_PATH, "trained_models/kino/last_n-150")
 dim_q_control_points = 6
 num_q_control_points = 15
 num_t_control_points = 20
