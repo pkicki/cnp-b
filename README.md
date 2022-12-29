@@ -27,7 +27,7 @@ python demo.py
 ## Use for motion planning in ROS
 Run docker container
 ```
-bash docker/run.sh
+cd docker && ./run.sh
 ```
 Run demo
 ```
