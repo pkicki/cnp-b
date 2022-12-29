@@ -10,6 +10,12 @@ See also:\
 [website](https://sites.google.com/view/constrained-neural-planning/) \
 [paper](link_to_arxiv)
 
+## Dependencies
+* Nlopt `sudo apt install libnlopt-dev`
+* Coin-or-CLP `sudo apt install coinor-libclp-dev`
+* Pinocchio `sudo apt install ros-noetic-pinocchio`
+* nvidia-docker (for demonstration of motion planning in ROS)
+
 ## Usage
 Download data
 ```
@@ -18,6 +24,10 @@ bash download_data.sh
 Download pre-trained models
 ```
 bash download_models.sh
+```
+Build python bindings
+```
+    bash build.sh
 ```
 Make an inference of the model on a sample problem
 ```
