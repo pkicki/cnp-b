@@ -4,3 +4,4 @@ rm -rf build/
 bash build.sh
 cd ..
 bash get_hpo.sh
+cd ..
