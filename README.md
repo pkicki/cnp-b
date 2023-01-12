@@ -8,7 +8,7 @@ Manifold with Deep Neural Networks".
 
 See also:\
 [website](https://sites.google.com/view/constrained-neural-planning/) \
-[paper](link_to_arxiv)
+[paper](https://arxiv.org/abs/2301.04330)
 
 ## Dependencies
 General
