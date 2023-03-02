@@ -2,8 +2,7 @@ from time import perf_counter
 
 import numpy as np
 import tensorflow as tf
-import tensorflow_graphics as tfg
-from tensorflow_graphics.math.vector import cross
+import tensorflow_graphics.geometry.transformation as tfg
 import pinocchio as pino
 import xml.etree.ElementTree as ET
 
@@ -51,14 +50,14 @@ class JointTF:
         self.fixed = jtype == "fixed"
         self.lb = lb
         self.ub = ub
-        self.Rb = tfg.geometry.transformation.rotation_matrix_3d.from_euler(self.rpy)
+        self.Rb = tfg.rotation_matrix_3d.from_euler(self.rpy)
 
     def Rq(self, q):
         if self.fixed:
             R = tf.reshape(tf.eye(3), [1 for i in range(len(q.shape))] + [3, 3])
             return R
         else:
-            return tfg.geometry.transformation.rotation_matrix_3d.from_euler(q[..., tf.newaxis] * self.axis)
+            return tfg.rotation_matrix_3d.from_euler(q[..., tf.newaxis] * self.axis)
 
     def R(self, q):
         if self.axis is None:
