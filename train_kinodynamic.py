@@ -13,10 +13,10 @@ from utils.constants import Limits, UrdfModels
 class args:
     batch_size = 128
     working_dir = './trainings'
-    out_name = 'name_of_the_model'
+    out_name = 'kinodynamic_as_in_paper_10kg'
     log_interval = 100
     learning_rate = 5e-5
-    dataset_path = "./data/paper/kinodynamic/train/data.tsv"
+    dataset_path = "./datasets/kinodynamic/train/data.tsv"
 
 
 train_data = np.loadtxt(args.dataset_path, delimiter='\t').astype(np.float32)

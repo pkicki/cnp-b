@@ -15,7 +15,7 @@ class args:
     out_name = 'name_of_the_model'
     log_interval = 100
     learning_rate = 5e-5
-    dataset_path = "./data/paper/air_hockey_hitting/train/data.tsv"
+    dataset_path = "./datasets/air_hockey_hitting/train/data.tsv"
 
 
 train_data = np.loadtxt(args.dataset_path, delimiter='\t').astype(np.float32)
