@@ -29,6 +29,9 @@ class FeasibilityLoss:
         q_ = q.numpy() if type(q) is not np.ndarray else q
         dq_ = dq.numpy() if type(dq) is not np.ndarray else dq
         ddq_ = ddq.numpy() if type(ddq) is not np.ndarray else ddq
+        q_ = np.pad(q_, ((0, 0), (0, 0), (0, self.model.nq - q_.shape[-1])))
+        dq_ = np.pad(dq_, ((0, 0), (0, 0), (0, self.model.nq - dq_.shape[-1])))
+        ddq_ = np.pad(ddq_, ((0, 0), (0, 0), (0, self.model.nq - ddq_.shape[-1])))
 
         def grad(upstream):
             for i in range(q_.shape[0]):
