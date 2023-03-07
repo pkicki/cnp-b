@@ -1,14 +1,17 @@
+import os
 import tensorflow as tf
 
 from losses.feasibility import FeasibilityLoss
 from losses.utils import huber
+from utils.constants import UrdfModels
 from utils.manipulator import Iiwa
 
 
 class HittingLoss(FeasibilityLoss):
     def __init__(self, N, urdf_path, end_effector_constraint_distance_function, obstacle_distance_function, q_dot_limits, q_ddot_limits,
                  q_dddot_limits, torque_limits):
-        super(HittingLoss, self).__init__(N, urdf_path, q_dot_limits, q_ddot_limits, q_dddot_limits, torque_limits)
+        super(HittingLoss, self).__init__(N, os.path.join(os.path.dirname(urdf_path), UrdfModels.iiwa),
+                                          q_dot_limits, q_ddot_limits, q_dddot_limits, torque_limits)
         self.end_effector_constraints_distance_function = end_effector_constraint_distance_function
         self.obstacle_distance_function = obstacle_distance_function
         self.man = Iiwa(urdf_path)
