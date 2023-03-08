@@ -23,6 +23,20 @@ def air_hockey_table(xyz, dt):
     return constraint_losses
 
 
+def air_hockey_table_heights(xyz, dt, data):
+    table_height = data[:, -1:]
+    xyz = xyz[..., 0]
+    huber_along_path = lambda x: tf.reduce_sum(dt * huber(x), axis=-1)  # / tf.reduce_sum(dt, axis=-1)
+    relu_huber_along_path = lambda x: huber_along_path(tf.nn.relu(x))
+    xlow_loss = relu_huber_along_path(table.xlb - xyz[..., 0])
+    xhigh_loss = relu_huber_along_path(xyz[..., 0] - table.xrt)
+    ylow_loss = relu_huber_along_path(table.ylb - xyz[..., 1])
+    yhigh_loss = relu_huber_along_path(xyz[..., 1] - table.yrt)
+    z_loss = huber_along_path(xyz[..., 2] - table_height)
+    constraint_losses = tf.stack([xlow_loss, xhigh_loss, ylow_loss, yhigh_loss, z_loss], axis=-1)
+    return constraint_losses
+
+
 def air_hockey_puck(xyz, dt, puck_pose):
     xy = xyz[:, :, :2, 0]
     dist_from_puck = tf.sqrt(tf.reduce_sum((puck_pose[:, tf.newaxis] - xy) ** 2, axis=-1))

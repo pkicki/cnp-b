@@ -19,6 +19,17 @@ def unpack_data_boundaries(x, n):
     return q0, qk, xyth, q_dot_0, q_dot_k, q_ddot_0, puck_pose
 
 
+def unpack_data_boundaries_heights(x, n):
+    q0 = x[:, :n - 1]
+    qk = x[:, n:2 * n - 1]
+    xyth = x[:, 2 * n: 2 * n + 3]
+    q_dot_0 = x[:, 2 * n + 3: 3 * n + 2]
+    q_ddot_0 = x[:, 3 * n + 3: 4 * n + 2]
+    q_dot_k = x[:, 4 * n + 3: 5 * n + 2]
+    table_height = x[:, -1:]
+    return q0, qk, xyth, q_dot_0, q_dot_k, q_ddot_0, table_height
+
+
 def unpack_data_kinodynamic(x, n):
     q0 = x[:, :n]
     qk = x[:, n:2 * n]

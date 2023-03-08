@@ -126,10 +126,10 @@ pino_data = pino_model.createData()
 #experiment_handler.restore(f"../trained_models/ik_hitting/pos_lossabs/best-53") # beyond adas1
 
 
-def get_hitting_configuration(xk, yk, thk, q0):
+def get_hitting_configuration(xk, yk, thk, q0, zk=Base.position[-1]):
     #qk = model(np.array([xk, yk, thk])[np.newaxis])
     #q = np.concatenate([qk.numpy()[0], np.zeros(3)], axis=-1)
-    qk, q_dot_k = get_hitting_configuration_opt(xk, yk, Base.position[-1], thk, q0)
+    qk, q_dot_k = get_hitting_configuration_opt(xk, yk, zk, thk, q0)
     if qk is None or q_dot_k is None:
         return None, None, None
     q = np.concatenate([qk, np.zeros(2)], axis=-1)

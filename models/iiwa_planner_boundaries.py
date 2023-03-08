@@ -5,7 +5,8 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 from utils.constants import Limits
-from utils.data import unpack_data_boundaries, unpack_data_kinodynamic, unpack_data_acrobot
+from utils.data import unpack_data_boundaries, unpack_data_kinodynamic, unpack_data_acrobot, \
+    unpack_data_boundaries_heights
 from utils.normalize import normalize_xy
 
 
@@ -138,4 +139,27 @@ class IiwaPlannerBoundariesKinodynamic(IiwaPlannerBoundaries):
             xe = tf.concat([xe, q_dot_d / Limits.q_dot7[np.newaxis]], axis=-1)
 
         x = tf.concat([xb, xe], axis=-1)
+        return x, q0, qd, q_dot_0, q_dot_d, q_ddot_0, np.zeros_like(q_ddot_0), expected_time
+
+
+class IiwaPlannerBoundariesHittingHeights(IiwaPlannerBoundaries):
+    def __init__(self, N, n_pts_fixed_begin, n_pts_fixed_end, bsp, bsp_t):
+        super(IiwaPlannerBoundariesHittingHeights, self).__init__(N, n_pts_fixed_begin, n_pts_fixed_end, bsp, bsp_t)
+
+    def prepare_data(self, x):
+        q0, qd, xyth, q_dot_0, q_dot_d, q_ddot_0, table_height = unpack_data_boundaries_heights(x, self.n_dof + 1)
+
+        expected_time = tf.reduce_max(tf.abs(qd - q0) / Limits.q_dot[np.newaxis], axis=-1)
+
+        xb = q0 / pi
+        if self.n_pts_fixed_begin > 1:
+            xb = tf.concat([xb, q_dot_0 / Limits.q_dot[np.newaxis]], axis=-1)
+        if self.n_pts_fixed_begin > 2:
+            xb = tf.concat([xb, q_ddot_0 / Limits.q_ddot[np.newaxis]], axis=-1)
+
+        xe = qd / pi
+        if self.n_pts_fixed_end > 1:
+            xe = tf.concat([xe, q_dot_d / Limits.q_dot[np.newaxis]], axis=-1)
+
+        x = tf.concat([xb, xe, table_height], axis=-1)
         return x, q0, qd, q_dot_0, q_dot_d, q_ddot_0, np.zeros_like(q_ddot_0), expected_time
