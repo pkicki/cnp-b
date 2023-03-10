@@ -28,5 +28,6 @@ RUN cd /catkin_ws/src/ && git clone https://github.com/pkicki/kinodynamic_stack.
 RUN cd /catkin_ws/src/ && git clone https://github.com/PuzeLiu/air_hockey_stack.git && cd air_hockey_stack && git checkout neural_planning && cd air_hockey_neural_planner/scripts && git submodule update --init --recursive
 # CNP-B
 RUN git clone https://github.com/pkicki/cnp-b.git && cd cnp-b && git submodule update --init --recursive
+RUN source /opt/ros/noetic/setup.bash && git clone https://github.com/pkicki/hitting_point_optimization.git && cd hitting_point_optimization && ./build.sh && cd build && cp hpo_opt_new.so /catkin_ws/src/air_hockey_stack/air_hockey_neural_planner/scripts/manifold_planning/utils/
 RUN source /opt/ros/noetic/setup.bash && cd catkin_ws && catkin_make -DCMAKE_BUILD_TYPE=Release
 RUN ln -s /usr/bin/python3 /usr/bin/python
