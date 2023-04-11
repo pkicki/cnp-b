@@ -49,3 +49,21 @@ def simple_collision_with_box(xyz, xl, xh, yl, yh, zl, zh):
     dist2box_inside = dist_point_2_box_inside(xyz, xl, xh, yl, yh, zl, zh)
     collision = tf.where(inside, dist2box_inside, tf.zeros_like(dist2box_inside))
     return collision
+
+
+def collision_with_circle(xy, obs_xy, obs_r):
+    obs_xy = obs_xy[:, tf.newaxis]
+    obs_r = obs_r[:, tf.newaxis]
+    dists = tf.sqrt(tf.reduce_sum(tf.square(xy[:, :, tf.newaxis] - obs_xy), axis=-1))
+    dist2border = obs_r - dists
+    inside = dists < obs_r
+    collision = tf.where(inside, dist2border, tf.zeros_like(dist2border))
+    return collision
+
+def collision_with_boundary(xy):
+    xy_dist = tf.reduce_max(tf.stack([0. - xy, tf.zeros_like(xy), xy - 1.], axis=-1), axis=-1)
+    dist = tf.sqrt(tf.reduce_sum(tf.square(xy_dist), axis=-1) + 1e-8)
+    valid = inside_rectangle(xy, 0., 1, 0., 1.)
+    collision = tf.where(valid, tf.zeros_like(dist), dist)
+    return collision
+

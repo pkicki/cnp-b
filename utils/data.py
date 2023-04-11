@@ -57,3 +57,12 @@ def unpack_data_linear_move(x, n):
     q_dot_0 = x[:, n + 6: 2 * n + 5]
     q_ddot_0 = x[:, 2 * n + 6: 3 * n + 5]
     return q0, xyz0, xyzk, q_dot_0, q_ddot_0
+
+
+def unpack_data_obstacles2D(x):
+    xy0 = x[:, :2]
+    dxy0 = x[:, 2:4]
+    xyk = x[:, 4:6]
+    dxyk = x[:, 6:8]
+    obstacles = x[:, 8:]
+    return xy0, xyk, dxy0, dxyk, obstacles
