@@ -112,3 +112,117 @@ class Obstacles2DPlannerBoundaries(tf.keras.Model):
 
         x = tf.concat(xy_begin + [xy + xyb] + xy_end[::-1], axis=-2)
         return x, dtau_dt[..., tf.newaxis]
+
+
+class Obstacles2DPathPlannerBoundaries(tf.keras.Model):
+    def __init__(self, N):
+        super(Obstacles2DPathPlannerBoundaries, self).__init__()
+        self.N = N - 2
+
+        activation = tf.keras.activations.tanh
+        W = 2048
+        self.fc = [
+            tf.keras.layers.Dense(W, activation),
+            tf.keras.layers.Dense(W, activation),
+            tf.keras.layers.Dense(W, activation),
+            tf.keras.layers.Dense(W, activation),
+            tf.keras.layers.Dense(W, activation),
+        ]
+
+        self.xy_est = [
+            tf.keras.layers.Dense(W, activation),
+            tf.keras.layers.Dense(self.N * 2, activation),
+        ]
+
+
+    def prepare_data(self, x):
+        xy0, xyk, dxy0, dxyk, obstacles = unpack_data_obstacles2D(x)
+
+        x = tf.concat([xy0, xyk, obstacles], axis=-1)
+        return x, xy0, xyk
+
+    def __call__(self, x):
+        x, xy0, xyk = self.prepare_data(x)
+
+        for l in self.fc:
+            x = l(x)
+
+        xy_est = x
+        for l in self.xy_est:
+            xy_est = l(xy_est)
+
+        xy = tf.reshape(xy_est, (-1, self.N, 2))
+        s = tf.linspace(0., 1., tf.shape(xy)[1] + 2)[tf.newaxis, 1:-1, tf.newaxis]
+
+        xy0 = xy0[:, tf.newaxis]
+        xyk = xyk[:, tf.newaxis]
+
+        xy_begin = [xy0]
+        xy_end = [xyk]
+
+        xyb = xy_begin[-1] * (1 - s) + xy_end[-1] * s
+
+        x = tf.concat(xy_begin + [xy + xyb] + xy_end, axis=-2)
+        return x
+
+
+class Obstacles2DInvPathPlannerBoundaries(tf.keras.Model):
+    def __init__(self, N):
+        super(Obstacles2DInvPathPlannerBoundaries, self).__init__()
+        self.N = N - 2
+
+        activation = tf.keras.activations.tanh
+        W = 2048
+        self.obs = [
+            tf.keras.layers.Dense(W, activation),
+            tf.keras.layers.Dense(W, activation),
+            tf.keras.layers.Dense(W, activation),
+        ]
+
+        self.fc = [
+            tf.keras.layers.Dense(W, activation),
+            tf.keras.layers.Dense(W, activation),
+            tf.keras.layers.Dense(W, activation),
+        ]
+
+        self.xy_est = [
+            tf.keras.layers.Dense(W, activation),
+            tf.keras.layers.Dense(self.N * 2, activation),
+        ]
+
+
+    def prepare_data(self, x):
+        xy0, xyk, dxy0, dxyk, obstacles = unpack_data_obstacles2D(x)
+
+        xy = tf.concat([xy0, xyk, obstacles], axis=-1)
+        return xy, xy0, xyk, obstacles
+
+    def __call__(self, x):
+        x, xy0, xyk, obstacles = self.prepare_data(x)
+
+        for l in self.fc:
+            x = l(x)
+
+        obs = tf.reshape(obstacles, (-1, 10, 3))
+        for l in self.obs:
+            obs = l(obs)
+
+        obs = tf.reduce_sum(obs, axis=-2)
+
+        xy_est = tf.concat([x, obs], axis=-1)
+        for l in self.xy_est:
+            xy_est = l(xy_est)
+
+        xy = tf.reshape(xy_est, (-1, self.N, 2))
+        s = tf.linspace(0., 1., tf.shape(xy)[1] + 2)[tf.newaxis, 1:-1, tf.newaxis]
+
+        xy0 = xy0[:, tf.newaxis]
+        xyk = xyk[:, tf.newaxis]
+
+        xy_begin = [xy0]
+        xy_end = [xyk]
+
+        xyb = xy_begin[-1] * (1 - s) + xy_end[-1] * s
+
+        x = tf.concat(xy_begin + [xy + xyb] + xy_end, axis=-2)
+        return x
