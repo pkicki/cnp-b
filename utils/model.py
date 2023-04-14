@@ -4,6 +4,7 @@ import tensorflow as tf
 from scipy.interpolate import BSpline as BSp
 from scipy.interpolate import interp1d
 
+from models.iiwa_obstacles_planner_boundaries import IiwaObstaclesPlannerBoundaries
 from models.iiwa_planner_boundaries import IiwaPlannerBoundariesKinodynamic, IiwaPlannerBoundariesHitting
 
 
@@ -17,6 +18,14 @@ def load_model_hitting(path, N, bsp, bsp_t):
 
 def load_model_kino(path, N, bsp, bsp_t):
     model = IiwaPlannerBoundariesKinodynamic(N, 3, 2, bsp, bsp_t)
+    model(np.zeros([1, 20], dtype=np.float32))
+    ckpt = tf.train.Checkpoint(model=model)
+    ckpt.restore(path).expect_partial()
+    return model
+
+
+def load_model_obstacles(path, N, bsp, bsp_t):
+    model = IiwaObstaclesPlannerBoundaries(N, 3, 3, bsp, bsp_t)
     model(np.zeros([1, 20], dtype=np.float32))
     ckpt = tf.train.Checkpoint(model=model)
     ckpt.restore(path).expect_partial()
