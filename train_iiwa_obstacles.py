@@ -82,7 +82,11 @@ for epoch in range(30000):
                 plt.plot(x[:, k], y[:, k])
                 plt.subplot(122)
                 plt.plot(y[:, k], z[:, k])
-            circles = [plt.Circle((o[0], o[1]), o[2], color='r') for o in obs[idx]]
+            plt.subplot(121)
+            circles = [plt.Circle((o[0], o[1]), o[3], color='r') for o in obs[idx]]
+            [plt.gca().add_patch(c) for c in circles]
+            plt.subplot(122)
+            circles = [plt.Circle((o[1], o[2]), o[3], color='r') for o in obs[idx]]
             [plt.gca().add_patch(c) for c in circles]
             plt.savefig(f"imgs/{epoch:05d}_{i:05d}.png")
 
