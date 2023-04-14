@@ -64,3 +64,7 @@ class UrdfModels:
     striker = "iiwa_striker.urdf"
     iiwa = "iiwa.urdf"
     iiwa_cup = "iiwa_cup.urdf"
+
+
+class Env:
+    n_obs = 3

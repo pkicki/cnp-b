@@ -4,7 +4,7 @@ import pinocchio as pino
 
 from losses.feasibility import FeasibilityLoss
 from losses.utils import huber
-from utils.constants import Robot
+from utils.constants import Robot, Env
 from utils.data import unpack_data_iiwa_obstacles
 from utils.manipulator import Iiwa
 
@@ -35,7 +35,7 @@ class IiwaObstaclesLoss(FeasibilityLoss):
         _, q_dot_loss, q_ddot_loss, q_dddot_loss, torque_loss, q, q_dot, q_ddot, q_dddot, torque, t, t_cumsum, dt = super().call(q_cps, t_cps, data)
         links_poses, R = self.man.interpolated_forward_kinematics(q)
         _, _, _, _, _, _, obstacles = unpack_data_iiwa_obstacles(data)
-        obstacles = tf.reshape(obstacles, (-1, 2, 4))
+        obstacles = tf.reshape(obstacles, (-1, Env.n_obs, 4))
         obstacles_xyz = obstacles[..., :-1]
         obstacles_r = obstacles[..., -1]
         links_poses = links_poses[..., 0]

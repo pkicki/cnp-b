@@ -3,7 +3,7 @@ from math import pi
 import tensorflow as tf
 import numpy as np
 
-from utils.constants import Limits
+from utils.constants import Limits, Env
 from utils.data import unpack_data_iiwa_obstacles
 
 
@@ -51,7 +51,7 @@ class IiwaObstaclesPlannerBoundaries(tf.keras.Model):
 
         expected_time = tf.reduce_max(tf.abs(qd - q0) / Limits.q_dot7[np.newaxis], axis=-1)
 
-        obstacles = tf.reshape(obstacles, (-1, 2, 4))
+        obstacles = tf.reshape(obstacles, (-1, Env.n_obs, 4))
 
         xb = q0 / pi
         if self.n_pts_fixed_begin > 1:

@@ -10,7 +10,7 @@ from utils.dataset import _ds
 from utils.execution import ExperimentHandler
 from losses.constraint_functions import two_tables_object_collision
 from models.iiwa_planner_boundaries import IiwaPlannerBoundariesKinodynamic
-from utils.constants import Limits, UrdfModels
+from utils.constants import Limits, UrdfModels, Env
 import matplotlib.pyplot as plt
 
 
@@ -21,7 +21,8 @@ class args:
     out_name = 'iiwa_obstacles_verysimple1_gamma1em4_'
     log_interval = 100
     learning_rate = 5e-5
-    dataset_path = "./data/paper/iiwa_obstacles_verysimple1/train/data.tsv"
+    #dataset_path = "./data/paper/iiwa_obstacles_verysimple3/train/data.tsv"
+    dataset_path = "./data/paper/iiwa_obstacles_simple1/train/data.tsv"
 
 n = 1
 
@@ -72,7 +73,7 @@ for epoch in range(30000):
         if plot and epoch % 20 == 0:
             plt.clf()
             _, _, _, _, _, _, obstacles = unpack_data_iiwa_obstacles(d)
-            obs = tf.reshape(obstacles, (-1, 2, 4))
+            obs = tf.reshape(obstacles, (-1, Env.n_obs, 4))
             idx = 0
             x = xyz[idx, :, :, 0]
             y = xyz[idx, :, :, 1]
