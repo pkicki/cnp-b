@@ -154,7 +154,10 @@ class Iiwa:
     def interpolate_links(self, xyzs):
         # dists = np.linalg.norm(np.diff(np.concatenate(xyzs, axis=-1), axis=-1), axis=-2)
         xyzs_ = [xyzs[0]]
-        for i, n in enumerate([0, 1, 2, 2, 2, 1, 2, 0, 0, 1]):
+        # iiwa_cup
+        #for i, n in enumerate([0, 1, 2, 2, 2, 1, 2, 0, 0, 1]):
+        # iiwa
+        for i, n in enumerate([0, 1, 2, 2, 2, 1, 2, 0, 0]):
             s = tf.linspace(0., 1., n + 2)[1:]
             for x in s:
                 xyzs_.append(x * xyzs[i + 1] + (1. - x) * xyzs[i])

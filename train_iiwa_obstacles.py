@@ -18,10 +18,10 @@ class args:
     #batch_size = 128
     batch_size = 1
     working_dir = './trainings'
-    out_name = 'iiwa_obstacles_test_gamma1em4_'
+    out_name = 'iiwa_obstacles_verysimple1_gamma1em4_'
     log_interval = 100
     learning_rate = 5e-5
-    dataset_path = "./data/paper/iiwa_obstacles_verysimple/train/data.tsv"
+    dataset_path = "./data/paper/iiwa_obstacles_verysimple1/train/data.tsv"
 
 n = 1
 
@@ -33,7 +33,7 @@ val_data = np.loadtxt(args.dataset_path.replace("train", "val"), delimiter='\t')
 val_size = val_data.shape[0]
 val_ds = tf.data.Dataset.from_tensor_slices(val_data)
 
-urdf_path = os.path.join(os.path.dirname(__file__), UrdfModels.iiwa_cup)
+urdf_path = os.path.join(os.path.dirname(__file__), UrdfModels.iiwa)
 
 N = 15
 opt = tf.keras.optimizers.Adam(args.learning_rate)
@@ -69,8 +69,8 @@ for epoch in range(30000):
         opt.apply_gradients(zip(grads, model.trainable_variables))
 
         plot = True
-        if plot:
-
+        if plot and epoch % 20 == 0:
+            plt.clf()
             _, _, _, _, _, _, obstacles = unpack_data_iiwa_obstacles(d)
             obs = tf.reshape(obstacles, (-1, 2, 4))
             idx = 0
@@ -83,11 +83,11 @@ for epoch in range(30000):
                 plt.subplot(122)
                 plt.plot(y[:, k], z[:, k])
             plt.subplot(121)
-            circles = [plt.Circle((o[0], o[1]), o[3], color='r') for o in obs[idx]]
-            [plt.gca().add_patch(c) for c in circles]
+            circles_xy = [plt.Circle((o[0], o[1]), o[3], color='r') for o in obs[idx]]
+            [plt.gca().add_patch(c) for c in circles_xy]
             plt.subplot(122)
-            circles = [plt.Circle((o[1], o[2]), o[3], color='r') for o in obs[idx]]
-            [plt.gca().add_patch(c) for c in circles]
+            circles_yz = [plt.Circle((o[1], o[2]), o[3], color='r') for o in obs[idx]]
+            [plt.gca().add_patch(c) for c in circles_yz]
             plt.savefig(f"imgs/{epoch:05d}_{i:05d}.png")
 
 
