@@ -66,3 +66,17 @@ def unpack_data_obstacles2D(x):
     dxyk = x[:, 6:8]
     obstacles = x[:, 8:]
     return xy0, xyk, dxy0, dxyk, obstacles
+
+
+def unpack_data_iiwa_obstacles(x):
+    n = 7
+    q0 = x[:, :n]
+    qk = x[:, n:2 * n]
+    obstacles = x[:, 2 * n:]
+    q_dot_0 = np.zeros_like(q0)
+    q_ddot_0 = np.zeros_like(q0)
+    q_dot_k = np.zeros_like(qk)
+    q_ddot_k = np.zeros_like(q0)
+    return q0, qk, q_dot_0, q_dot_k, q_ddot_0, q_ddot_k, obstacles
+
+

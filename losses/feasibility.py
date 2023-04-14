@@ -8,7 +8,7 @@ from utils.manipulator import Iiwa
 
 
 class FeasibilityLoss:
-    def __init__(self, N, urdf_path, q_dot_limits, q_ddot_limits, q_dddot_limits, torque_limits):
+    def __init__(self, N, urdf_path, q_dot_limits, q_ddot_limits, q_dddot_limits, torque_limits, no_torque=False):
         self.bsp_t = BSpline(20)
         self.bsp = BSpline(N)
         self.q_dot_limits = q_dot_limits
@@ -18,6 +18,7 @@ class FeasibilityLoss:
         self.iiwa = Iiwa(urdf_path)
         self.model = pino.buildModelFromUrdf(urdf_path)
         self.data = self.model.createData()
+        self.no_torque = no_torque
 
     @tf.custom_gradient
     def rnea(self, q, dq, ddq):
@@ -73,7 +74,10 @@ class FeasibilityLoss:
         q_dddot_limits = tf.constant(self.q_dddot_limits)[tf.newaxis, tf.newaxis]
         torque_limits = tf.constant(self.torque_limits)[tf.newaxis, tf.newaxis]
 
-        torque = self.rnea(q, q_dot, q_ddot)
+        if self.no_torque:
+            torque = tf.zeros_like(q)
+        else:
+            torque = self.rnea(q, q_dot, q_ddot)
 
         torque_loss_ = tf.nn.relu(tf.abs(torque) - torque_limits)
         torque_loss_ = huber(torque_loss_)
