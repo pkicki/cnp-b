@@ -37,7 +37,7 @@ class Cup:
 
 
 class Robot:
-    radius = 0.14
+    radius = 0.12
 
 
 class Limits:
