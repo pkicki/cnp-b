@@ -67,4 +67,4 @@ class UrdfModels:
 
 
 class Env:
-    n_obs = 3
+    n_obs = 2
