@@ -29,7 +29,32 @@ def load_model_obstacles(path, N, bsp, bsp_t):
     model(np.zeros([1, 22], dtype=np.float32))
     ckpt = tf.train.Checkpoint(model=model)
     ckpt.restore(path).expect_partial()
+    model.prepare_weights()
+    model.inference(np.zeros([1, 22], dtype=np.float32))
     return model
+
+
+def compute_trajectory(q_cps, t_cps, bsp, bspt):
+    q = bsp.N @ q_cps
+    q_dot_tau = bsp.dN @ q_cps
+    q_ddot_tau = bsp.ddN @ q_cps
+
+    dtau_dt = bspt.N @ t_cps
+    ddtau_dtt = bspt.dN @ t_cps
+
+    ts = 1. / dtau_dt[..., 0] / dtau_dt.shape[1]
+    t = tf.cumsum(np.concatenate([np.zeros_like(ts[..., :1]), ts[..., :-1]], axis=-1), axis=-1)
+
+    q_dot = q_dot_tau * dtau_dt
+    q_ddot = q_ddot_tau * dtau_dt ** 2 + ddtau_dtt * q_dot_tau * dtau_dt
+
+    return q[0], q_dot[0], q_ddot[0], t[0]
+
+
+def model_fast_inference(model, data, bsp, bspt):
+    q_cps, t_cps = model.inference(data)
+    q, q_dot, q_ddot, t = compute_trajectory(q_cps, t_cps, bsp, bspt)
+    return q, q_dot, q_ddot, t, q_cps, t_cps
 
 
 def model_inference(model, data, bsp, bspt, expected_time=-1., uniform=False, freq=100):
