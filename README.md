@@ -28,7 +28,7 @@ For demonstration of motion planning in ROS
 ## Usage
 Download data
 ```
-bash download_data.sh
+bash download_datasets.sh
 ```
 Download pre-trained models
 ```
