@@ -25,6 +25,10 @@ For Air-Hockey hitting
 For demonstration of motion planning in ROS
 * [docker](https://docs.docker.com/engine/install/ubuntu/)
 
+For results plotting and statistical analysis
+* SciPy ``
+* statsmodels `pip install statsmodels`
+
 ## Usage
 Download data
 ```
