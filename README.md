@@ -1,14 +1,14 @@
 Constrained Manifold Neural Motion Planning with B-splines (CNP-B)
 --
 
-Implementation of "Fast Kinodynamic Planning on the Constraint
-Manifold with Deep Neural Networks".
+Implementation of P. Kicki et al., "Fast Kinodynamic Planning on the Constraint Manifold With Deep Neural Networks," in IEEE Transactions on Robotics, vol. 40, pp. 277-297, 2024.
 
 ![main image](media/hitting.gif)
 
 See also:\
+[paper T-RO](https://ieeexplore.ieee.org/document/10292912) \
 [website](https://sites.google.com/view/constrained-neural-planning/) \
-[paper](https://arxiv.org/abs/2301.04330)
+[paper ArXiv](https://arxiv.org/abs/2301.04330)
 
 ## Dependencies
 General
@@ -59,6 +59,19 @@ cd docker && ./run.sh
 Run demo
 ```
 bash demo/demo.sh
+```
+
+## Cite
+```
+@ARTICLE{kicki2024kinodynamic,
+  author={Kicki, Piotr and Liu, Puze and Tateo, Davide and Bou-Ammar, Haitham and Walas, Krzysztof and Skrzypczyński, Piotr and Peters, Jan},
+  journal={IEEE Transactions on Robotics}, 
+  title={Fast Kinodynamic Planning on the Constraint Manifold With Deep Neural Networks}, 
+  year={2024},
+  volume={40},
+  number={},
+  pages={277-297},
+  doi={10.1109/TRO.2023.3326922}}
 ```
 
 
